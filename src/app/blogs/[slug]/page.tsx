@@ -4,14 +4,14 @@ import Image from "next/image";
 import CommentsSection from "./CommentsSection";
 
 interface DetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 // Server-side function to fetch data
 export async function generateMetadata({ params }: DetailPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   // Query to fetch the post by slug
   const query = `*[_type == "post" && slug.current == $slug][0] {
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: DetailPageProps) {
 
 // Fetch the content from Sanity based on the slug
 export default async function DetailPage({ params }: DetailPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   // Query to fetch the post by slug
   const query = `*[_type == "post" && slug.current == $slug][0] {
